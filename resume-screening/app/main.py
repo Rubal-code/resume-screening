@@ -1,7 +1,8 @@
 from fastapi import FastAPI, UploadFile, File
 import joblib
 import re
-import nltk
+
+
 import os
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
@@ -16,8 +17,8 @@ app = FastAPI(title="Resume Screening API")
 # ---------------------------
 # Paths
 # ---------------------------
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))   # app/
-MODEL_DIR = os.path.join(BASE_DIR, "..", "model")       # ../model/
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # app/
+MODEL_DIR = os.path.join(BASE_DIR, "..", "model")  # ../model/
 
 model_path = os.path.join(MODEL_DIR, "resume_model.pkl")
 tfidf_path = os.path.join(MODEL_DIR, "tfidf.pkl")
@@ -37,6 +38,7 @@ tfidf = joblib.load(tfidf_path)
 lemmatizer = WordNetLemmatizer()
 stop_words = set(stopwords.words("english"))
 
+
 # ---------------------------
 # Text cleaning
 # ---------------------------
@@ -47,6 +49,7 @@ def clean_text(text: str) -> str:
     words = text.split()
     words = [lemmatizer.lemmatize(w) for w in words if w not in stop_words]
     return " ".join(words)
+
 
 # ---------------------------
 # PDF text extractor
@@ -60,6 +63,7 @@ def extract_text_from_pdf(file: UploadFile) -> str:
             text += extracted
     return text
 
+
 # ---------------------------
 # Routes
 # ---------------------------
@@ -67,14 +71,14 @@ def extract_text_from_pdf(file: UploadFile) -> str:
 def home():
     return {"message": "Resume Analyzer API is running"}
 
+
 @app.post("/predict-text")
 def predict_text(text: str):
     clean = clean_text(text)
     vector = tfidf.transform([clean])
     prediction = model.predict(vector)
-    return {
-        "prediction": prediction.tolist()
-    }
+    return {"prediction": prediction.tolist()}
+
 
 @app.post("/predict-pdf")
 def predict_pdf(file: UploadFile = File(...)):
@@ -86,10 +90,8 @@ def predict_pdf(file: UploadFile = File(...)):
     vector = tfidf.transform([clean])
     prediction = model.predict(vector)
 
-    return {
-        "filename": file.filename,
-        "prediction": prediction.tolist()
-    }
- 
+    return {"filename": file.filename, "prediction": prediction.tolist()}
+
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

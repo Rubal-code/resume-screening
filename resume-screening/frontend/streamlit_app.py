@@ -6,17 +6,17 @@ from PyPDF2 import PdfReader
 # -----------------------------
 # Page config
 # -----------------------------
-st.set_page_config(
-    page_title="Resume Screening App",
-    page_icon="📄",
-    layout="centered"
+st.set_page_config(page_title="Resume Screening App", page_icon="📄", layout="centered")
+BACKGROUND_IMAGE = (
+    "https://encrypted-tbn0.gstatic.com/images?"
+    "q=tbn:ANd9GcToXZ8nFvzCgge15rpA9a5Pn9eotsK8XUyOlg&s"
 )
 # Set background image using CSS
 st.markdown(
     """
     <style>
     .stApp {
-        background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToXZ8nFvzCgge15rpA9a5Pn9eotsK8XUyOlg&s");
+        background-image: url("{BACKGROUND_IMAGE}");
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -24,13 +24,14 @@ st.markdown(
     }
     </style>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
 
 st.title("📄 Resume Screening System")
 st.write("Upload your resume (PDF) and see resume details before prediction.")
 
 BACKEND_URL = "http://127.0.0.1:8000/predict-pdf"
+
 
 # -----------------------------
 # Helper functions
@@ -49,6 +50,7 @@ def extract_email(text):
     match = re.findall(r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+", text)
     return match[0] if match else "Not found"
 
+
 def extract_phone(text):
     match = re.findall(r"\b\d{10}\b", text)
     return match[0] if match else "Not found"
@@ -63,85 +65,158 @@ def extract_name(text):
     return "Not found"
 
 
-
 def extract_skills(text):
     skills_db = [
-
-    # ---------------- TECH / ENGINEERING ----------------
-    "python", "java", "c++", "c", "sql", "nosql", "mongodb",
-    "machine learning", "deep learning", "data science",
-    "nlp", "computer vision", "tensorflow", "pytorch",
-    "html", "css", "javascript", "typescript",
-    "react", "angular", "vue",
-    "node.js", "express", "fastapi", "django", "flask",
-    "spring", "spring boot",
-    "git", "github", "docker", "kubernetes",
-    "aws", "azure", "gcp",
-    "linux", "unix", "rest api", "microservices",
-
-    # ---------------- DATA / ANALYTICS ----------------
-    "power bi", "tableau", "excel", "advanced excel",
-    "data analysis", "data analytics", "statistics",
-    "business intelligence", "etl", "data warehousing",
-    "big data", "hadoop", "spark",
-
-    # ---------------- MARKETING ----------------
-    "digital marketing", "seo", "sem", "smm",
-    "content marketing", "email marketing",
-    "google analytics", "google ads", "facebook ads",
-    "branding", "market research",
-    "lead generation", "campaign management",
-    "copywriting", "marketing strategy",
-
-    # ---------------- SALES ----------------
-    "sales", "inside sales", "b2b sales", "b2c sales",
-    "crm", "salesforce", "hubspot",
-    "cold calling", "negotiation",
-    "account management", "pipeline management",
-    "customer acquisition",
-
-    # ---------------- FINANCE ----------------
-    "financial analysis", "financial modeling",
-    "accounting", "bookkeeping",
-    "budgeting", "forecasting",
-    "taxation", "gst", "income tax",
-    "investment analysis", "equity research",
-    "risk management", "corporate finance",
-    "balance sheet", "profit and loss", "cash flow",
-    "auditing",
-
-    # ---------------- HR ----------------
-    "human resources", "recruitment",
-    "talent acquisition", "hr analytics",
-    "payroll", "performance management",
-    "employee engagement",
-    "training and development",
-    "onboarding", "labor law",
-
-    # ---------------- OPERATIONS / MANAGEMENT ----------------
-    "operations management", "supply chain",
-    "logistics", "inventory management",
-    "process improvement", "six sigma",
-    "lean management", "project management",
-    "agile", "scrum",
-    "stakeholder management",
-
-    # ---------------- DESIGN / CREATIVE ----------------
-    "ui design", "ux design", "figma",
-    "adobe photoshop", "illustrator",
-    "indesign", "canva",
-    "wireframing", "prototyping",
-
-    # ---------------- SOFT SKILLS ----------------
-    "communication", "presentation",
-    "problem solving", "critical thinking",
-    "leadership", "teamwork",
-    "time management", "decision making",
-    "adaptability", "creativity"
-]
+        # ---------------- TECH / ENGINEERING ----------------
+        "python",
+        "java",
+        "c++",
+        "c",
+        "sql",
+        "nosql",
+        "mongodb",
+        "machine learning",
+        "deep learning",
+        "data science",
+        "nlp",
+        "computer vision",
+        "tensorflow",
+        "pytorch",
+        "html",
+        "css",
+        "javascript",
+        "typescript",
+        "react",
+        "angular",
+        "vue",
+        "node.js",
+        "express",
+        "fastapi",
+        "django",
+        "flask",
+        "spring",
+        "spring boot",
+        "git",
+        "github",
+        "docker",
+        "kubernetes",
+        "aws",
+        "azure",
+        "gcp",
+        "linux",
+        "unix",
+        "rest api",
+        "microservices",
+        # ---------------- DATA / ANALYTICS ----------------
+        "power bi",
+        "tableau",
+        "excel",
+        "advanced excel",
+        "data analysis",
+        "data analytics",
+        "statistics",
+        "business intelligence",
+        "etl",
+        "data warehousing",
+        "big data",
+        "hadoop",
+        "spark",
+        # ---------------- MARKETING ----------------
+        "digital marketing",
+        "seo",
+        "sem",
+        "smm",
+        "content marketing",
+        "email marketing",
+        "google analytics",
+        "google ads",
+        "facebook ads",
+        "branding",
+        "market research",
+        "lead generation",
+        "campaign management",
+        "copywriting",
+        "marketing strategy",
+        # ---------------- SALES ----------------
+        "sales",
+        "inside sales",
+        "b2b sales",
+        "b2c sales",
+        "crm",
+        "salesforce",
+        "hubspot",
+        "cold calling",
+        "negotiation",
+        "account management",
+        "pipeline management",
+        "customer acquisition",
+        # ---------------- FINANCE ----------------
+        "financial analysis",
+        "financial modeling",
+        "accounting",
+        "bookkeeping",
+        "budgeting",
+        "forecasting",
+        "taxation",
+        "gst",
+        "income tax",
+        "investment analysis",
+        "equity research",
+        "risk management",
+        "corporate finance",
+        "balance sheet",
+        "profit and loss",
+        "cash flow",
+        "auditing",
+        # ---------------- HR ----------------
+        "human resources",
+        "recruitment",
+        "talent acquisition",
+        "hr analytics",
+        "payroll",
+        "performance management",
+        "employee engagement",
+        "training and development",
+        "onboarding",
+        "labor law",
+        # ---------------- OPERATIONS / MANAGEMENT ----------------
+        "operations management",
+        "supply chain",
+        "logistics",
+        "inventory management",
+        "process improvement",
+        "six sigma",
+        "lean management",
+        "project management",
+        "agile",
+        "scrum",
+        "stakeholder management",
+        # ---------------- DESIGN / CREATIVE ----------------
+        "ui design",
+        "ux design",
+        "figma",
+        "adobe photoshop",
+        "illustrator",
+        "indesign",
+        "canva",
+        "wireframing",
+        "prototyping",
+        # ---------------- SOFT SKILLS ----------------
+        "communication",
+        "presentation",
+        "problem solving",
+        "critical thinking",
+        "leadership",
+        "teamwork",
+        "time management",
+        "decision making",
+        "adaptability",
+        "creativity",
+    ]
     text = text.lower()
     found = [skill for skill in skills_db if skill in text]
     return found if found else ["Not detected"]
+
 
 # -----------------------------
 # File upload
@@ -189,7 +264,7 @@ if uploaded_file:
                     "file": (
                         uploaded_file.name,
                         uploaded_file.getvalue(),
-                        "application/pdf"
+                        "application/pdf",
                     )
                 }
                 response = requests.post(BACKEND_URL, files=files)

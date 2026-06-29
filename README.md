@@ -64,12 +64,12 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 ### 3. Install Dependencies
 ```bash
-pip install -r resume-screening/requirements.txt
+pip install -r requirements.txt
 ```
 
 ### 4. Start the API Server
 ```bash
-bash resume-screening/start.sh
+bash start.sh
 ```
 
 Or manually:
